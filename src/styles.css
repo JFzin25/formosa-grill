@@ -1,0 +1,232 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Formosa Grill — design system
+ * Paleta: preto #111111, vermelho escuro #B71C1C, dourado #D4AF37, branco.
+ * Todos os valores de cor em oklch. Nunca usar cores fixas em componentes.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-ember: var(--ember);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --radius: 0.75rem;
+
+  --background: oklch(0.16 0.005 20);
+  --foreground: oklch(0.97 0.004 90);
+  --card: oklch(0.2 0.008 25);
+  --card-foreground: oklch(0.97 0.004 90);
+  --popover: oklch(0.19 0.008 25);
+  --popover-foreground: oklch(0.97 0.004 90);
+
+  /* Vermelho escuro #B71C1C */
+  --primary: oklch(0.48 0.181 27.5);
+  --primary-foreground: oklch(0.99 0 0);
+
+  --secondary: oklch(0.26 0.012 30);
+  --secondary-foreground: oklch(0.97 0.004 90);
+  --muted: oklch(0.24 0.008 30);
+  --muted-foreground: oklch(0.72 0.012 60);
+
+  /* Dourado #D4AF37 */
+  --gold: oklch(0.77 0.126 88);
+  --gold-soft: oklch(0.86 0.07 90);
+  --ember: oklch(0.66 0.19 40);
+
+  --accent: oklch(0.28 0.02 40);
+  --accent-foreground: oklch(0.86 0.07 90);
+
+  --destructive: oklch(0.55 0.21 27);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.32 0.012 40 / 60%);
+  --input: oklch(0.32 0.012 40 / 70%);
+  --ring: oklch(0.77 0.126 88);
+
+  --sidebar: oklch(0.18 0.008 25);
+  --sidebar-foreground: oklch(0.97 0.004 90);
+  --sidebar-primary: oklch(0.48 0.181 27.5);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.26 0.012 30);
+  --sidebar-accent-foreground: oklch(0.97 0.004 90);
+  --sidebar-border: oklch(0.32 0.012 40 / 60%);
+  --sidebar-ring: oklch(0.77 0.126 88);
+
+  --gradient-ember: linear-gradient(
+    135deg,
+    oklch(0.48 0.181 27.5) 0%,
+    oklch(0.62 0.19 40) 100%
+  );
+  --gradient-gold: linear-gradient(
+    100deg,
+    oklch(0.86 0.07 90) 0%,
+    oklch(0.77 0.126 88) 45%,
+    oklch(0.66 0.11 70) 100%
+  );
+  --gradient-veil: linear-gradient(
+    180deg,
+    oklch(0.12 0.01 25 / 0.35) 0%,
+    oklch(0.12 0.01 25 / 0.72) 55%,
+    oklch(0.16 0.005 20) 100%
+  );
+  --shadow-elegant: 0 24px 60px -24px oklch(0 0 0 / 0.8);
+  --shadow-gold: 0 18px 44px -20px oklch(0.77 0.126 88 / 0.45);
+}
+
+.light {
+  --background: oklch(0.99 0.003 90);
+  --foreground: oklch(0.18 0.006 25);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.006 25);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.006 25);
+  --secondary: oklch(0.95 0.006 80);
+  --secondary-foreground: oklch(0.2 0.008 25);
+  --muted: oklch(0.95 0.006 80);
+  --muted-foreground: oklch(0.48 0.012 45);
+  --accent: oklch(0.94 0.02 85);
+  --accent-foreground: oklch(0.34 0.09 45);
+  --border: oklch(0.2 0.01 40 / 12%);
+  --input: oklch(0.2 0.01 40 / 16%);
+  --gradient-veil: linear-gradient(
+    180deg,
+    oklch(0.12 0.01 25 / 0.3) 0%,
+    oklch(0.12 0.01 25 / 0.6) 60%,
+    oklch(0.99 0.003 90) 100%
+  );
+}
+
+@utility text-gradient-gold {
+  background: var(--gradient-gold);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@utility glass-panel {
+  background: color-mix(in oklab, var(--card) 55%, transparent);
+  border: 1px solid color-mix(in oklab, var(--gold) 18%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: var(--shadow-elegant);
+}
+
+@utility gold-rule {
+  height: 2px;
+  width: 64px;
+  background: var(--gradient-gold);
+  border-radius: 9999px;
+}
+
+@utility reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  &[data-visible="true"] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@utility hover-lift {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease;
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-gold);
+  }
+}
+
+@keyframes ember-float {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-120px) scale(0.4);
+    opacity: 0;
+  }
+}
+
+@keyframes slow-zoom {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: scale(1.18);
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
