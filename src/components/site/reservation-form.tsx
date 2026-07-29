@@ -56,25 +56,6 @@ export function ReservationForm() {
         status: "pending",
       });
 
-      // Também abre o WhatsApp para confirmação rápida
-      const message = [
-        "*Nova reserva — Formosa Grill*",
-        `Nome: ${r.name}`,
-        `Telefone: ${r.phone}`,
-        `Pessoas: ${r.people}`,
-        `Data: ${new Date(`${r.date}T00:00:00`).toLocaleDateString("pt-BR")}`,
-        `Horário: ${r.time}`,
-        r.notes ? `Observações: ${r.notes}` : null,
-      ]
-        .filter(Boolean)
-        .join("\n");
-
-      window.open(
-        `https://wa.me/${restaurant.whatsapp}?text=${encodeURIComponent(message)}`,
-        "_blank",
-        "noopener",
-      );
-
       toast.success("Reserva registrada! Nossa equipe confirmará em instantes.");
       event.currentTarget.reset();
     } catch (err) {

@@ -15,7 +15,7 @@ export const Route = createFileRoute("/login")({
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { session, loading } = useAuth();
+  const { session, loading, profile } = useAuth();
   const [mode, setMode] = useState<"login" | "register">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,8 +23,9 @@ function LoginPage() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!loading && session) navigate({ to: "/admin" });
-  }, [session, loading, navigate]);
+    // Redireciona ao painel somente quando sessão e profile existirem
+    if (!loading && session && profile) navigate({ to: "/admin" });
+  }, [session, loading, profile, navigate]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -37,7 +38,7 @@ function LoginPage() {
       if (mode === "login") {
         await signInWithEmail(email, password);
         toast.success("Login realizado com sucesso!");
-        navigate({ to: "/admin" });
+        // Redirecionamento será tratado pelo efeito que observa `session` + `profile`
       } else {
         const result = await signUpWithEmail(email, password);
         if (result.success) {
@@ -83,21 +84,9 @@ function LoginPage() {
           </p>
         </div>
 
-        <button
-          onClick={handleGoogle}
-          disabled={submitting}
-          className="flex w-full items-center justify-center gap-3 rounded-xl border border-border bg-card px-4 py-3 text-sm font-medium transition-colors hover:bg-accent disabled:opacity-60"
-        >
-          <GoogleIcon />
-          Entrar com Google
-        </button>
+        
 
-        <div className="flex items-center gap-3">
-          <div className="h-px flex-1 bg-border" />
-          <span className="text-xs text-muted-foreground">ou</span>
-          <div className="h-px flex-1 bg-border" />
-        </div>
-
+        
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="mb-2 block text-sm font-medium">E-mail</label>
@@ -174,8 +163,7 @@ function LoginPage() {
         {mode === "register" && (
           <div className="rounded-xl border border-border bg-muted/40 p-4 text-xs leading-relaxed text-muted-foreground">
             ⚠️ O cadastro é restrito. Seu e-mail precisa estar autorizado pelo
-            administrador. O primeiro usuário cadastrado torna-se
-            automaticamente administrador.
+            administrador.
           </div>
         )}
       </div>

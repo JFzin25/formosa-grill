@@ -19,6 +19,9 @@ export function SiteHeader() {
 
   useEffect(() => setOpen(false), [pathname]);
 
+  // Oculta o cabeçalho em todas as rotas administrativas
+  if (typeof pathname === "string" && pathname.startsWith("/admin")) return null;
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
@@ -54,8 +57,10 @@ export function SiteHeader() {
               <Link
                 key={l.to}
                 to={l.to}
-                activeProps={{ className: "text-gold" }}
-                className="rounded-full px-4 py-2 text-sm font-medium text-foreground/85 transition-colors hover:text-gold"
+                className={cn(
+                  "rounded-full px-4 py-2 text-sm font-medium text-foreground/85 transition-colors hover:text-gold",
+                  pathname === l.to && "text-gold"
+                )}
               >
                 {l.label}
               </Link>
@@ -93,8 +98,10 @@ export function SiteHeader() {
             <Link
               key={l.to}
               to={l.to}
-              activeProps={{ className: "text-gold" }}
-              className="block rounded-xl px-4 py-3 text-base font-medium transition-colors hover:bg-accent"
+              className={cn(
+                "block rounded-xl px-4 py-3 text-base font-medium transition-colors hover:bg-accent",
+                pathname === l.to && "text-gold"
+              )}
             >
               {l.label}
             </Link>

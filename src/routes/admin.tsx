@@ -4,7 +4,6 @@ import {
   LayoutDashboard,
   UtensilsCrossed,
   FolderTree,
-  ClipboardList,
   CalendarCheck,
   Images,
   Mail,
@@ -19,8 +18,13 @@ import {
   Store,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
-import { isAdmin, isManagerOrAbove, isStaff } from "@/lib/auth";
+import { isAdmin, isManagerOrAbove, isStaff, updatePassword } from "@/lib/auth";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Painel Admin — Formosa Grill" }] }),
@@ -31,7 +35,6 @@ const navItems = [
   { label: "Dashboard", to: "/admin", icon: LayoutDashboard, roles: ["admin", "manager", "employee"] },
   { label: "Produtos", to: "/admin/produtos", icon: UtensilsCrossed, roles: ["admin", "manager"] },
   { label: "Categorias", to: "/admin/categorias", icon: FolderTree, roles: ["admin", "manager"] },
-  { label: "Pedidos", to: "/admin/pedidos", icon: ClipboardList, roles: ["admin", "manager", "employee"] },
   { label: "Reservas", to: "/admin/reservas", icon: CalendarCheck, roles: ["admin", "manager", "employee"] },
   { label: "Galeria", to: "/admin/galeria", icon: Images, roles: ["admin", "manager"] },
   { label: "Mensagens", to: "/admin/mensagens", icon: Mail, roles: ["admin", "manager", "employee"] },
@@ -48,12 +51,31 @@ function AdminLayout() {
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [updatingPassword, setUpdatingPassword] = useState(false);
 
   useEffect(() => {
     if (!loading && !profile) {
       navigate({ to: "/login" });
     }
   }, [profile, loading, navigate]);
+
+  useEffect(() => {
+    const footer = document.querySelector("footer");
+    const whatsappLink = document.querySelector("a[aria-label='Falar no WhatsApp']");
+    const prevFooterDisplay = footer instanceof HTMLElement ? footer.style.display : "";
+    const prevWhatsAppDisplay = whatsappLink instanceof HTMLElement ? whatsappLink.style.display : "";
+
+    if (footer instanceof HTMLElement) footer.style.display = "none";
+    if (whatsappLink instanceof HTMLElement) whatsappLink.style.display = "none";
+
+    return () => {
+      if (footer instanceof HTMLElement) footer.style.display = prevFooterDisplay;
+      if (whatsappLink instanceof HTMLElement) whatsappLink.style.display = prevWhatsAppDisplay;
+    };
+  }, []);
 
   if (loading) {
     return (
@@ -72,6 +94,31 @@ function AdminLayout() {
   const handleSignOut = async () => {
     await signOut();
     navigate({ to: "/login" });
+  };
+
+  const handleUpdatePassword = async () => {
+    if (!newPassword) {
+      toast.error("Informe a nova senha.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast.error("As senhas não coincidem.");
+      return;
+    }
+
+    setUpdatingPassword(true);
+    try {
+      await updatePassword(newPassword);
+      toast.success("Senha atualizada com sucesso.");
+      setPasswordDialogOpen(false);
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Erro ao atualizar senha.";
+      toast.error(msg);
+    } finally {
+      setUpdatingPassword(false);
+    }
   };
 
   return (
@@ -129,6 +176,49 @@ function AdminLayout() {
             >
               {profile.role}
             </span>
+            <Dialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm">Mudar senha</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Alterar senha</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4 pt-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="new-password">Nova senha</Label>
+                    <Input
+                      id="new-password"
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="confirm-password">Confirmar senha</Label>
+                    <Input
+                      id="confirm-password"
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                  </div>
+                  <div className="flex justify-end gap-2 pt-2">
+                    <Button variant="secondary" size="sm" type="button" onClick={() => setPasswordDialogOpen(false)}>
+                      Cancelar
+                    </Button>
+                    <Button
+                      size="sm"
+                      type="button"
+                      onClick={handleUpdatePassword}
+                      disabled={updatingPassword}
+                    >
+                      {updatingPassword ? "Salvando..." : "Salvar senha"}
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
             <Link to="/" className="rounded-lg border border-border p-2 transition-colors hover:bg-accent" title="Ver site">
               <Store className="h-4 w-4" />
             </Link>

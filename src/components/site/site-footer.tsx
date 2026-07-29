@@ -24,8 +24,9 @@ export function SiteFooter() {
   // Usa settings do banco se disponíveis, senão fallback do restaurant.ts
   const telefone = settings?.telefone ?? restaurant.phone;
   const whatsapp = settings?.whatsapp ?? restaurant.whatsapp;
-  const instagram = settings?.instagram ?? restaurant.mapsUrl;
-  const facebook = settings?.facebook ?? restaurant.mapsUrl;
+  // Mostra ícones de redes sociais somente se o link existir e não for string vazia
+  const instagram = settings?.instagram?.trim() || null;
+  const facebook = settings?.facebook?.trim() || null;
   const endereco = settings?.endereco ?? `${restaurant.address.street}, ${restaurant.address.district}, ${restaurant.address.city} ${restaurant.address.zip}`;
   const horario = settings?.horario ?? restaurant.hours;
   const mapaUrl = settings?.mapa_url ?? restaurant.mapsUrl;
@@ -41,24 +42,29 @@ export function SiteFooter() {
             artesanais e ambiente familiar.
           </p>
           <div className="mt-5 flex gap-3">
-            <a
-              href={instagram}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Instagram do Formosa Grill"
-              className="grid h-10 w-10 place-items-center rounded-full border border-border transition-colors hover:border-gold hover:text-gold"
-            >
-              <Instagram className="h-4 w-4" />
-            </a>
-            <a
-              href={facebook}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Facebook do Formosa Grill"
-              className="grid h-10 w-10 place-items-center rounded-full border border-border transition-colors hover:border-gold hover:text-gold"
-            >
-              <Facebook className="h-4 w-4" />
-            </a>
+            {instagram ? (
+              <a
+                href={instagram}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Instagram do Formosa Grill"
+                className="grid h-10 w-10 place-items-center rounded-full border border-border transition-colors hover:border-gold hover:text-gold"
+              >
+                <Instagram className="h-4 w-4" />
+              </a>
+            ) : null}
+
+            {facebook ? (
+              <a
+                href={facebook}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Facebook do Formosa Grill"
+                className="grid h-10 w-10 place-items-center rounded-full border border-border transition-colors hover:border-gold hover:text-gold"
+              >
+                <Facebook className="h-4 w-4" />
+              </a>
+            ) : null}
           </div>
         </div>
 
